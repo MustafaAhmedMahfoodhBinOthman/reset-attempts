@@ -6,7 +6,6 @@
 # load_dotenv()
 # # Supabase connection details
 # url: str = "https://wqlryzngdnfrarolbmma.supabase.co"
-# # key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxbHJ5em5nZG5mcmFyb2xibW1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc1MDk4NTksImV4cCI6MjAzMzA4NTg1OX0.zHkAeB9XxyC30WtQJSQnEyvNKCDneZ05EIQ6lfIHqQw"
 # key: str=  os.getenv("supabase")
 # supabase: Client = create_client(url, key)
 
@@ -42,7 +41,6 @@ load_dotenv()
 
 # Supabase connection details
 url: str = "https://wqlryzngdnfrarolbmma.supabase.co"
-# key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxbHJ5em5nZG5mcmFyb2xibW1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc1MDk4NTksImV4cCI6MjAzMzA4NTg1OX0.zHkAeB9XxyC30WtQJSQnEyvNKCDneZ05EIQ6lfIHqQw"
 key: str=  os.getenv("supabase")
 supabase: Client = create_client(url, key)
 
