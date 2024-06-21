@@ -46,17 +46,23 @@ supabase: Client = create_client(url, key)
 
 async def reset_user_attempts():
     current_time = datetime.now(utc)
-    print(current_time - timedelta(hours=24))
+    print(f"Resetting attempts at: {current_time}")
     
-    # Retrieve all users whose last_attempt_time is older than 24 hours
-    result = supabase.table('ielts_speaking_users').select('user_id').lt('last_attempt_time', current_time - timedelta(hours=24)).execute()
+    # Log state of a few users before reset
+    before_reset = supabase.table('ielts_speaking_users').select('*').limit(5).execute()
+    print("State before reset:", before_reset.data)
     
-    if result.data:
-        # Reset attempts_remaining for the eligible users
-        supabase.table('ielts_speaking_users').update({
-            'attempts_remaining': 5
-        }).in_('user_id', [user['user_id'] for user in result.data]).execute()
-
+    # Reset attempts_remaining for all users
+    result = supabase.table('ielts_speaking_users').update({
+        'attempts_remaining': 5,
+        'last_attempt_time': current_time.isoformat()
+    }).gte('user_id', 0).execute()  # This condition will apply to all rows with non-negative user_id
+    
+    # Log state of the same users after reset
+    after_reset = supabase.table('ielts_speaking_users').select('*').limit(5).execute()
+    # print("State after reset:", after_reset.data)
+    
+    print(f"Reset attempts for {len(result.data)} users")
 async def main():
     while True:
         # Get the current time in UTC
