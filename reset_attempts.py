@@ -55,7 +55,7 @@ async def reset_user_attempts():
     # Reset attempts_remaining for all users
     result = supabase.table('ielts_speaking_users').update({
         'attempts_remaining': 5,
-        'last_attempt_time': current_time.isoformat()
+        # 'last_attempt_time': current_time.isoformat()
     }).gte('user_id', 0).execute()  # This condition will apply to all rows with non-negative user_id
     
     # Log state of the same users after reset
