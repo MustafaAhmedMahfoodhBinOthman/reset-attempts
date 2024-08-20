@@ -6,6 +6,7 @@
 # load_dotenv()
 # # Supabase connection details
 # url: str = "https://wqlryzngdnfrarolbmma.supabase.co"
+# # key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxbHJ5em5nZG5mcmFyb2xibW1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc1MDk4NTksImV4cCI6MjAzMzA4NTg1OX0.zHkAeB9XxyC30WtQJSQnEyvNKCDneZ05EIQ6lfIHqQw"
 # key: str=  os.getenv("supabase")
 # supabase: Client = create_client(url, key)
 
@@ -37,11 +38,19 @@ from supabase import create_client, Client
 from dotenv import load_dotenv
 from pytz import utc
 import os
+from flask import Flask
 load_dotenv()
+app = Flask(__name__)
 
+# Health check endpoint
+@app.route('/health', methods=['GET'])
+def health_check():
+    return "OK", 200
 # Supabase connection details
 url: str = "https://wqlryzngdnfrarolbmma.supabase.co"
-key: str=  os.getenv("supabase")
+# key: str = os.getenv("supabase")
+key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxbHJ5em5nZG5mcmFyb2xibW1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc1MDk4NTksImV4cCI6MjAzMzA4NTg1OX0.zHkAeB9XxyC30WtQJSQnEyvNKCDneZ05EIQ6lfIHqQw"
+
 supabase: Client = create_client(url, key)
 
 async def reset_user_attempts():
@@ -55,7 +64,7 @@ async def reset_user_attempts():
     # Reset attempts_remaining for all users
     result = supabase.table('ielts_speaking_users').update({
         'attempts_remaining': 5,
-        # 'last_attempt_time': current_time.isoformat()
+        'last_attempt_time': current_time.isoformat()
     }).gte('user_id', 0).execute()  # This condition will apply to all rows with non-negative user_id
     
     # Log state of the same users after reset
@@ -84,4 +93,7 @@ async def main():
         print("Number of attempts have been updated")
 
 if __name__ == '__main__':
+    from threading import Thread
+    flask_thread = Thread(target=lambda: app.run(host='0.0.0.0', port=8080), daemon=True)
+    flask_thread.start()
     asyncio.run(main())
